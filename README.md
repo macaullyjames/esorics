@@ -1,10 +1,8 @@
 Rosenblum's code: http://pages.cs.wisc.edu/~nater/esorics-supp/
-
 This directory contains programs for binary code feature extraction as
 described in the paper. 
 
-
-Prerequisites & Building:
+### Prerequisites & Building:
 
 This software requires a recent beta of the Dyninst library with the ParseAPI
 component, which can be downloaded at the following URL:
@@ -31,7 +29,7 @@ configuration command:
 
 
 
-Usage:
+### Usage:
 
 Usage instructions for each feature extraction utility can be obtained with the
 --help option. There are two different modes of output: the `ngrams` program
@@ -51,6 +49,3 @@ other programs list features as a comma-separated list of tuples feature:count. 
 The output format for these programs is not meant to be interpretable, but
 rather to form input for learning algorithms that recognize stylistic
 features.
-
-
-    
