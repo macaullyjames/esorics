@@ -4,6 +4,8 @@ described in the paper.
 
 ### Prerequisites & Building:
 
+1. Install cmake (`brew install cmake`)
+
 This software requires a recent beta of the Dyninst library with the ParseAPI
 component, which can be downloaded at the following URL:
 
