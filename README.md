@@ -1,10 +1,21 @@
 Rosenblum's code: http://pages.cs.wisc.edu/~nater/esorics-supp/
-This directory contains programs for binary code feature extraction as
-described in the paper. 
+
 
 ### Prerequisites & Building:
+OS: Fedora 23
+Install packages:
+- libdyninst-dev
+- gcc-c++
+- elfutils-libelf-devel.x86_64
 
-1. Install cmake (`brew install cmake`)
+To build `ngrams.cc` (after our changes):
+```
+g++ -std=c++0x -o ngrams ngrams.cc -L/usr/lib64/dyninst -I/usr/include/dyninst/ -lparseAPI -linstructionAPI -lsymtabAPI -ldynDwarf -ldynElf -lcommon -L/usr/include/ -lelf -L/usr/include/ -ldwarf
+```
+
+# Original README:
+This directory contains programs for binary code feature extraction as
+described in the paper.
 
 This software requires a recent beta of the Dyninst library with the ParseAPI
 component, which can be downloaded at the following URL:
