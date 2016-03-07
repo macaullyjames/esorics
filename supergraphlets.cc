@@ -263,7 +263,7 @@ int main(int argc, char **argv)
     co = new CodeObject( sts );
     co->parse();
 
-    CodeObject::funclist & funcs = co->funcs();
+    auto & funcs = co->funcs();
 
     if(EXCLUDE)
         load_exclude(exclude);    
