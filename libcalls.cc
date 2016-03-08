@@ -188,7 +188,7 @@ int main(int argc, char **argv)
 
     hash_map<string,int>::iterator cit = pltcnts.begin();
     for( ; cit != pltcnts.end(); ++cit) {
-        char * sep;
+        char const* sep;
         if(COMMASEP)
             sep = ",";
         else
