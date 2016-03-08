@@ -15,6 +15,8 @@
 
 #include "InstructionDecoder.h"
 #include "Instruction.h"
+#include <boost/iterator/filter_iterator.hpp>
+using boost::make_filter_iterator; 
 
 #include "CodeSource.h"
 #include "CodeObject.h"
@@ -199,10 +201,9 @@ void mkgraphlets(Function * f,
     // Foreach block in the function
     //   for each pair of its neighboring *blocks*
     //     make a graphlet describing this triple & record it 
-    Function::blocklist & blocks = f->blocks();
-    Function::blocklist::iterator bit = blocks.begin();
+    auto blocks = f->blocks();
 
-    for( ; bit != blocks.end(); ++bit) {
+    for(auto bit = blocks.begin(); bit != blocks.end(); ++bit) {
         Block * b = *bit;
 
         if(seen.find(b->start()) != seen.end())
@@ -211,17 +212,20 @@ void mkgraphlets(Function * f,
 
         Block::edgelist srcs = b->sources();
         Block::edgelist trgs = b->targets();
-        Block::edgelist::iterator eit;
 
         // Step one: reduce the edge set to a block set
         std::set<Block*> srcblks;
         std::set<Block*> trgblks;
   
-        for(eit=srcs.begin(&nosink);eit!=srcs.end();++eit) {
+        for(auto eit = make_filter_iterator(nosink, srcs.begin(), srcs.end());
+                    eit != make_filter_iterator(nosink, srcs.end(), srcs.end());
+                    eit++) {
             if((*eit)->src() != b)
                 srcblks.insert((*eit)->src());
         }
-        for(eit=trgs.begin(&nosink);eit!=trgs.end();++eit) {
+        for(auto eit = make_filter_iterator(nosink, trgs.begin(), trgs.end());
+                    eit != make_filter_iterator(nosink, trgs.end(), trgs.end());
+                    eit++) {
             if((*eit)->trg() != b) 
                 trgblks.insert((*eit)->trg());
         }
@@ -317,7 +321,7 @@ int main(int argc, char **argv)
     co = new CodeObject( sts );
     co->parse();
 
-    CodeObject::funclist & funcs = co->funcs();
+    auto funcs = co->funcs();
 
     if(EXCLUDE)
         load_exclude(exclude);    
