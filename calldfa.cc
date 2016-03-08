@@ -13,6 +13,9 @@
 #include <vector>
 #include <limits>
 
+#include <boost/iterator/filter_iterator.hpp>
+using boost::make_filter_iterator; 
+
 #include "InstructionDecoder.h"
 #include "Instruction.h"
 
@@ -153,14 +156,20 @@ void load_libmap(dyn_hash_map<string,unsigned short> & libmap)
         free(buf); 
 }
 
+bool nsi(Edge* e)
+{
+    NoSinkPredicate nspred;
+    Intraproc pred;
+    return nspred(e) && pred(e);
+}
+
 void targets(Block * b, set<Block*> &t)
 {
-    Intraproc ip;
-    NoSinkPredicate pred(&ip);
-
-    Block::edgelist::iterator bit = b->targets().begin(&pred);
-    for( ; bit != b->targets().end(); ++bit)
+    for(auto bit = make_filter_iterator(nsi, b->targets().begin(), b->targets().end());
+        bit != make_filter_iterator(nsi, b->targets().end(), b->targets().end());
+        bit++) {
         t.insert((*bit)->trg());
+    }
 }
 
 const int NULLDEF = numeric_limits<int>::max();
@@ -270,13 +279,12 @@ graph * collapse(
     }
 
     // 3. Find exit nodes && link according to reaching defs
-    Intraproc pred1;
-    NoSinkPredicate pred2(&pred1);
     for(unsigned i=0;i<blocks.size();++i) {
         Block * b = blocks[i];
-        Block::edgelist::iterator it = b->targets().begin(&pred2);
         int tcnt = 0;
-        for( ; it != b->targets().end(); ++it) {
+        for(auto it = make_filter_iterator(nsi, b->targets().begin(), b->targets().end());
+            it != make_filter_iterator(nsi, b->targets().end(), b->targets().end());
+            ++it) {
             ++tcnt;
         }
         if(tcnt == 0) {
@@ -345,7 +353,7 @@ int main(int argc, char **argv)
     co = new CodeObject( sts );
     co->parse();
 
-    CodeObject::funclist & funcs = co->funcs();
+    auto funcs = co->funcs();
 
     if(EXCLUDE)
         load_exclude(exclude);    
@@ -387,7 +395,7 @@ int main(int argc, char **argv)
 
     std::map<graphlet,int>::const_iterator cit = counts.begin();
     for( ; cit != counts.end(); ++cit) {
-        char * sep;
+        char const* sep;
         if(COMMASEP)
             sep = ",";
         else
