@@ -277,7 +277,7 @@ void print(std::map<graphlet,int>& counts)
 {
     std::map<graphlet,int>::const_iterator cit = counts.begin();
     for( ; cit != counts.end(); ++cit) {
-        char * sep;
+        const char * sep;
         if(COMMASEP)
             sep = ",";
         else
