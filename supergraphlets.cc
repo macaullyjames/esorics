@@ -15,6 +15,10 @@
 #include <vector>
 #include <set>
 
+#include <boost/iterator/filter_iterator.hpp>
+using boost::make_filter_iterator; 
+
+
 #include "InstructionDecoder.h"
 #include "Instruction.h"
 
@@ -165,6 +169,13 @@ unsigned short node_color(Block * A)
     return ret; 
 }
 
+bool nsi(Edge* e)
+{
+    NoSinkPredicate nspred;
+    Intraproc pred;
+    return nspred(e) && pred(e);
+}
+
 // Using `seen' here to avoid duplicating the subgraphs
 // corresponding to the shared areas of functions.
 //
@@ -173,40 +184,40 @@ graph *
 func_to_graph(Function * f, dyn_hash_map<Address,bool> & seen)
 {
     dyn_hash_map<Address,snode*> node_map;
-    NoSinkPredicate nspred;
-    Intraproc pred(&nspred);
 
     int nctr = 0;
 
     graph * g = new graph();
-    Function::blocklist & blocks = f->blocks();
+    Function::blocklist blocks = f->blocks();
     Function::blocklist::iterator bit = blocks.begin();
 
     dyn_hash_map<size_t,bool> done_edges;
-    
     for( ; bit != blocks.end(); ++bit) {
-        Block * b = *bit;
-        snode * n = g->addNode();
+            Block * b = *bit;
+            snode * n = g->addNode();
 
-        char nm[16];
-        snprintf(nm,16,"n%d",nctr++);
-        n->name_ = std::string(nm);
+            char nm[16];
+            snprintf(nm,16,"n%d",nctr++);
+            n->name_ = std::string(nm);
 
-        node_map[b->start()] = n;
-        if(COLOR)
-            n->setColor(new InsnColor(node_color(b)));
+            node_map[b->start()] = n;
+            if(COLOR)
+                n->setColor(new InsnColor(node_color(b)));
     }
+    
     unsigned idx = 0;
-    for(bit = blocks.begin() ; bit != blocks.end(); ++bit) {
+
+    for( ; bit != blocks.end(); ++bit) {
         Block * b = *bit;
 
         if(seen.find(b->start()) != seen.end())
             continue;
         seen[b->start()] = true;
 
-        Block::edgelist::iterator eit;
         snode * n = g->nodes()[idx];
-        for(eit = b->sources().begin(&pred); eit != b->sources().end(); ++eit) {
+        for(auto eit = make_filter_iterator(nsi, b->sources().begin(), b->sources().end());
+            eit != make_filter_iterator(nsi, b->sources().end(), b->sources().end());
+            eit++) {
             Edge * e = *eit;
 
             if(done_edges.find((size_t)e) != done_edges.end())
@@ -217,7 +228,9 @@ func_to_graph(Function * f, dyn_hash_map<Address,bool> & seen)
                 (void)g->link(node_map[e->src()->start()],n,e->type());
             }
         }
-        for(eit = b->targets().begin(&pred); eit != b->targets().end();++eit) {
+        for(auto eit = make_filter_iterator(nsi, b->targets().begin(), b->targets().end());
+            eit != make_filter_iterator(nsi, b->targets().end(), b->targets().end());
+            eit++) {
             Edge * e = *eit;
 
             if(done_edges.find((size_t)e) != done_edges.end())
