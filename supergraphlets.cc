@@ -189,10 +189,9 @@ func_to_graph(Function * f, dyn_hash_map<Address,bool> & seen)
 
     graph * g = new graph();
     Function::blocklist blocks = f->blocks();
-    Function::blocklist::iterator bit = blocks.begin();
 
     dyn_hash_map<size_t,bool> done_edges;
-    for( ; bit != blocks.end(); ++bit) {
+    for(auto bit = blocks.begin(); bit != blocks.end(); ++bit) {
             Block * b = *bit;
             snode * n = g->addNode();
 
@@ -207,7 +206,7 @@ func_to_graph(Function * f, dyn_hash_map<Address,bool> & seen)
     
     unsigned idx = 0;
 
-    for( ; bit != blocks.end(); ++bit) {
+    for(auto bit = blocks.begin(); bit != blocks.end(); ++bit) {
         Block * b = *bit;
 
         if(seen.find(b->start()) != seen.end())
