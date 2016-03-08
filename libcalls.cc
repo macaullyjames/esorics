@@ -139,7 +139,7 @@ int main(int argc, char **argv)
     co = new CodeObject( sts );
     co->parse();
 
-    CodeObject::funclist & funcs = co->funcs();
+    auto funcs = co->funcs();
 
     if(EXCLUDE)
         load_exclude(exclude);    
@@ -170,7 +170,7 @@ int main(int argc, char **argv)
             continue;
         }
 
-        Function::edgelist & calls = f->callEdges();
+        auto calls = f->callEdges();
         Function::edgelist::iterator it = calls.begin();
         for( ; it != calls.end(); ++it) {
             Edge * e = *it;
