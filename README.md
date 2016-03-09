@@ -12,7 +12,10 @@ To build `ngrams.cc` (after our changes):
 ```
 g++ -std=gnu++14 -o ngrams ngrams.cc -L/usr/lib64/dyninst -I/usr/include/dyninst/ -lparseAPI -linstructionAPI -lsymtabAPI -ldynDwarf -ldynElf -lcommon -L/usr/include/ -lelf -L/usr/include/ -ldwarf
 ```
-
+To build `idioms.cc` (requires linking to libfeat, note the `-c` flag):
+```
+g++ -std=gnu++14 -o idioms idioms.cc -L/usr/lib64/dyninst -I/usr/include/dyninst/ -lparseAPI -linstructionAPI -lsymtabAPI -ldynDwarf -ldynElf -lcommon -L/usr/include/ -lelf -L/usr/include/ -ldwarf -I./libfeat -c
+```
 # Original README:
 This directory contains programs for binary code feature extraction as
 described in the paper.
