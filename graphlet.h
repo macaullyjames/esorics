@@ -5,6 +5,7 @@
 #include <vector>
 #include <iostream>
 #include <sstream>
+#include <unordered_map>
 
 namespace graphlets {
 
@@ -81,11 +82,11 @@ class edgeset {
 
     std::string compact() const {
         std::stringstream ret;
-        std::map<int,int> unique;
+        std::unordered_map<int,int> unique;
         std::vector<int>::const_iterator it = types_.begin();
         for( ; it != types_.end(); ++it)
             unique[*it] +=1;
-        std::map<int,int>::iterator uit = unique.begin();
+        std::unordered_map<int,int>::iterator uit = unique.begin();
         for( ; uit != unique.end(); ) {
             ret << (*uit).first;
             if((*uit).second > 1)

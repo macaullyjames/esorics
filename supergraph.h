@@ -6,6 +6,7 @@
 #include <map>
 
 #include "colors.h"
+#include "graphlet.h"
 
 namespace graphlets {
 
