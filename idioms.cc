@@ -7,7 +7,7 @@
 #include <errno.h>
 
 #include <vector>
-#include <ext/hash_map>
+#include <unordered_map>
 #include <map>
 
 #include "InstructionDecoder.h"
@@ -98,7 +98,7 @@ chomp(char*s)
 }
 
 
-void load_exclude(hash_map<string,bool> & exclude)
+void load_exclude(unordered_map<string,bool> & exclude)
 {
     char * buf = NULL;
     size_t n = 0;
@@ -129,7 +129,7 @@ void print(map<string,int>&counts)
 }
 
 int main(int argc, char**argv) {
-    hash_map<string, bool> exclude;
+    unordered_map<string, bool> exclude;
     SymtabCodeSource *sts;
     CodeObject *co;
     struct stat sbuf;
@@ -156,7 +156,7 @@ int main(int argc, char**argv) {
     co = new CodeObject(sts);
 
     co->parse();
-    CodeObject::funclist & funcs = co->funcs();
+    auto funcs = co->funcs();
     for(CodeObject::funclist::iterator fit = funcs.begin();
         fit != funcs.end();
         ++fit)
