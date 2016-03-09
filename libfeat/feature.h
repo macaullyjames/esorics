@@ -32,6 +32,7 @@
 #define _FEATURE_H_
 
 #include <string>
+#include <unordered_map>
 
 #include "Operation.h"
 #include "Register.h"
@@ -233,7 +234,7 @@ class Lookup {
     };
 
     class Lnode;
-    typedef __gnu_cxx::hash_map<LT, Lnode *, lt_hash, lt_equal> lmap_t;
+    typedef unordered_map<LT, Lnode *, lt_hash, lt_equal> lmap_t;
     class Lnode {
      public:
         LookupFeature *f;
@@ -250,7 +251,7 @@ class Lookup {
 
  private:
 
-    __gnu_cxx::hash_map<Address, vector<LT *> > _term_map;
+    unordered_map<Address, vector<LT *> > _term_map;
 
     Lnode start;
     bool fixed;

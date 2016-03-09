@@ -30,6 +30,7 @@
  */
 #include <assert.h>
 #include <stdio.h>
+#include <unordered_map>
 
 #include "CodeObject.h"
 #include "InstructionDecoder.h"
@@ -234,7 +235,7 @@ void Lookup<OperandFeature>::lookup(
 template<typename T>
 Lookup<T>::~Lookup() 
 {
-    typename hash_map<Address, vector<LT *> >::iterator tit = _term_map.begin();
+    typename unordered_map<Address, vector<LT *> >::iterator tit = _term_map.begin();
     for( ; tit != _term_map.end(); ++tit)
         for(unsigned i=0;i<tit->second.size();++i) 
             delete (tit->second)[i];
