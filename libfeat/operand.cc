@@ -87,8 +87,7 @@ OperandTerm::operator<(const OperandTerm &it) const {
 
 size_t
 OperandTerm::hash() const {
-    __gnu_cxx::hash<uint64_t> H; 
-    return H(to_int());
+    return tr1::hash<uint64_t>()(to_int());
 }
 
 uint64_t
