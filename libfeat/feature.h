@@ -34,9 +34,11 @@
 #include <string>
 #include <unordered_map>
 
+#include "Symbol.h"
 #include "Operation.h"
 #include "Register.h"
 #include "Function.h"
+#include "CFG.h"
 
 #define ILLEGAL_ENTRY e_No_Entry
 #define NOARG 0xffff
