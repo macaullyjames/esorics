@@ -1,19 +1,16 @@
-include ../make.local
 BASE            = ..
 #DYNINST_ROOT   ?= $(BASE)/dyninst
 CXX	            = g++
-CXXFLAGS        = -g -Wall
+CXXFLAGS        = -g -Wall --std=c++14
 LIBVERSION      = 1.0
-LDFLAGS         = -liberty
+LDFLAGS         = 
 
 # Dyninst etc
 #PLATFORM        = x86_64-unknown-linux2.4
-DYNLDFLAGS      = -L/p/paradyn/packages/libelf/lib\
-                  -L/p/paradyn/packages/libdwarf/lib\
-                  -L$(DYNINST_ROOT)/$(PLATFORM)/lib\
+DYNLDFLAGS      = -L/usr/lib64/dyninst \
                   -lelf -ldwarf -lcommon -linstructionAPI -lsymtabAPI -lparseAPI
-DYNCXXFLAGS     = -I$(DYNINST_ROOT)/include \
-                  -I$(DYNINST_ROOT)/dyninst
+
+DYNCXXFLAGS     = -I/usr/include/dyninst
 
 CXXFLAGS       += $(DYNCXXFLAGS)
 LDFLAGS        += $(DYNLDFLAGS)
