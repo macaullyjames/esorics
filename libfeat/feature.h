@@ -230,7 +230,7 @@ class Lookup {
         }
     };
     struct lt_equal {
-        bool operator()(const LT & a, const LT &b) {
+        bool operator()(const LT & a, const LT &b) const {
             return a == b;
         }
     };

@@ -50,7 +50,6 @@ OperandTerm * OP_WC[] = { &WILDCARD_OPERAND_D1, &WILDCARD_OPERAND_D2 };
 
 
 using namespace std;
-using namespace __gnu_cxx;
 using namespace Dyninst;
 using namespace Dyninst::ParseAPI;
 using namespace Dyninst::InstructionAPI;
