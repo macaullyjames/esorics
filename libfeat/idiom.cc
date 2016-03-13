@@ -39,7 +39,7 @@
 
 #include "feature.h"
 
-#include "common/h/Singleton.h"
+#include "Singleton.h"
 
 using namespace std;
 using namespace Dyninst;
@@ -80,7 +80,7 @@ IdiomTerm::IdiomTerm(Function *f, Address addr) :
             
             // we'll take up to two operands... which seems bad. FIXME
 
-            short args[2] = {NOARG,NOARG};
+            unsigned short args[2] = {NOARG,NOARG};
             
             for(unsigned int i=0;i<2 && i<ops.size();++i) {
                 Operand & op = ops[i];
@@ -182,8 +182,7 @@ IdiomTerm::operator<(const IdiomTerm &it) const {
 
 size_t
 IdiomTerm::hash() const {
-    __gnu_cxx::hash<uint64_t> H; 
-    return H(to_int());
+    return tr1::hash<uint64_t>()(to_int());
 }
 
 uint64_t
@@ -277,9 +276,9 @@ IdiomFeature::format() {
     for(unsigned i=0;i<_terms.size();++i) {
         // XXX shrink output by removing NOARGs from right
         uint64_t out = ((IdiomTerm*)_terms[i])->to_int();
-        if(out & 0xffff == NOARG)
+        if((out & 0xffff) == NOARG)
             out = out >> 16;
-        if(out & 0xffff == NOARG)
+        if((out & 0xffff) == NOARG)
             out = out >> 16;
 
         if(i+1<_terms.size())
