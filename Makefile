@@ -1,22 +1,18 @@
-include make.local
-
 BASE            = .
 #DYNINST_ROOT   ?= $(BASE)/dyninst
 #LIBELF         ?= /usr/lib
 #LIBDWARF       ?= /usr/lib
 CXX	            = g++
-CXXFLAGS        = -g -Wall
-INCLUDE         = -I$(BASE)/libfeat -I$(DYNINST_ROOT)/include
+CXXFLAGS        = -g -Wall --std=c++14
+INCLUDE         = -I/usr/include/dyninst -I./libfeat/
 LIBVERSION      = 1.0
 LDFLAGS         =
 
 # Dyninst-dependent programs
 #PLATFORM       ?= x86_64-unknown-linux2.4
-DYNLDFLAGS      = -L$(LIBELF)\
-                  -L$(LIBDWARF)\
-                  -L$(DYNINST_ROOT)/$(PLATFORM)/lib\
+DYNLDFLAGS      = -L/usr/lib64/dyninst \
                   -lelf -ldwarf -lcommon -linstructionAPI -lsymtabAPI\
-                  -lparseAPI -liberty
+                  -lparseAPI
             
 ifndef DEBUG
 CXXFLAGS       += -O3 
@@ -88,7 +84,7 @@ libfeat_clean:
 
 -include depend
 depend: $(DEPS) Makefile
-	$(V)gcc $(INCLUDE) $(DYNCXXFLAGS) -MM $(DEPS) > depend
+	$(V)gcc --std=c++14 $(INCLUDE) $(DYNCXXFLAGS) -MM $(DEPS) > depend
 
 .PHONY: clean
 clean: libfeat_clean
