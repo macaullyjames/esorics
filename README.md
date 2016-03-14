@@ -30,21 +30,11 @@ dyninst-devel-9.0.3-1.fc23.x86_64
 ### Copying over this repo
 You can do this any way you want, but if you're not planning on making any changes it's probably easiest to download the repo as a .zip file and copy it over using `scp`.
 
-### Building
-To build, just type `make` in the repo's root folder :)
-
-After building, a shared object file `libfeat.so.1.0` will be created in the `libfeat` folder. The `idioms` program tries to link to this at runtime, so you need to put this in the appropriate folder for dynamically linked libraries. On our test system this is `/usr/lib64/`:
-
-```
-cp libfeat/libfeat.so.1.0 /usr/lib64/
-```
-
-### Running
-After building there should six programs in the project root: `ngrams`, `idioms`, `graphlets`, `supergraphlets`, `calldfa`, and `libcalls`. You can make sure they work by running them against themselves, for example:
+### Building and installing
 ```sh
-./graphlets graphlets
+make && make install
 ```
-If you get a bunch of cryptic nonsense, you're good to go! :smile:
+This will add the six binaries `ngrams`, `idioms`, `graphlets`, `supergraphlets`, `calldfa`, and `libcalls` to the `usr/local/bin` folder. You can run these programs from any folder :)
 
 ### Usage (from Rosenblum's original README)
 
