@@ -3,19 +3,20 @@ Rosenblum's code: http://pages.cs.wisc.edu/~nater/esorics-supp/
 
 ### Prerequisites & Building:
 OS: Fedora 23
+
 Install packages:
 - libdyninst-dev
 - gcc-c++
 - elfutils-libelf-devel.x86_64
 
-To build `ngrams.cc` (after our changes):
+To build, just type `make` :)
+
+After building a shared object file `libfeat.so.1.0` will be created in the `libfeat` folder. The `idioms` program tries to link to this at runtime, so you need to put this in the appropriate folder for dynamically linked libraries. On our test system this is `/usr/lib64/`:
+
 ```
-g++ -std=gnu++14 -o ngrams ngrams.cc -L/usr/lib64/dyninst -I/usr/include/dyninst/ -lparseAPI -linstructionAPI -lsymtabAPI -ldynDwarf -ldynElf -lcommon -L/usr/include/ -lelf -L/usr/include/ -ldwarf
+cp libfeat/libfeat.so.1.0 /usr/lib64/
 ```
-To compile all files (without linking):
-```
-g++ -std=gnu++14 * -L/usr/lib64/dyninst -I/usr/include/dyninst/ -lparseAPI -linstructionAPI -lsymtabAPI -ldynDwarf -ldynElf -lcommon -L/usr/include/ -lelf -L/usr/include/ -ldwarf -I./libfeat -c
-```
+
 # Original README:
 This directory contains programs for binary code feature extraction as
 described in the paper.
