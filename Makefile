@@ -74,6 +74,11 @@ idioms: idioms.o libfeat
 	@echo + ld $@
 	$(V)$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $<
 
+.PHONY: install
+install: all
+	cp libfeat/libfeat.so.1.0 /usr/lib64/
+	cp calldfa graphlets idioms libcalls ngrams supergraphlets /usr/local/bin/
+
 .PHONY: libfeat
 libfeat:
 	$(V)make -C $@
